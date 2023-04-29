@@ -5,6 +5,8 @@ import mongoose from "mongoose";
 import { DATABASE } from "./config";
 
 import authRoutes from "./routes/auth";
+import productRoutes from "./routes/products";
+import cartRoutes from "./routes/cart";
 
 const morgan = require("morgan");
 
@@ -24,6 +26,8 @@ app.use(cors());
 app.use(morgan("dev"));
 
 // route middlewares
-app.use("/api", authRoutes);
+app.use("/api/users", authRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/cart", cartRoutes);
 
 app.listen(8000, () => console.log("Server running on port 8000"));

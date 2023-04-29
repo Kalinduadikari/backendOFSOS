@@ -1,15 +1,56 @@
 import User from "../Models/users";
 import { hashPassword, comparePassword } from "../helpers/auth";
 import jwt from "jsonwebtoken";
+import { expressjwt } from "express-jwt";
+const cloudinary = require('cloudinary').v2
+
+const { nanoid } = require('nanoid');
+
+
+ 
+
+
 
 // Sendinblue
 import SibApiV3Sdk from 'sib-api-v3-sdk';
-import { JWT_SECRET, SENDINBLUE_API_KEY, EMAIL_FROM } from "../config";
+import { JWT_SECRET, SENDINBLUE_API_KEY, EMAIL_FROM, CLOUDINARY_NAME, CLOUDINARY_KEY, CLOUDINARY_SECRET } from "../config";
 
 const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 const defaultClient = SibApiV3Sdk.ApiClient.instance;
 const apiKey = defaultClient.authentications['api-key'];
 apiKey.apiKey = SENDINBLUE_API_KEY;
+
+//cloudinary
+cloudinary.config({       
+ cloud_name: CLOUDINARY_NAME,
+ api_key: CLOUDINARY_KEY,
+ api_secret: CLOUDINARY_SECRET,
+});
+
+//middleware 
+export const requireSignin = expressjwt({
+  secret: JWT_SECRET,
+  algorithms: ["HS256"],
+});
+
+
+// authenticateUser middleware
+export const authenticateUser = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    const decoded = jwt.verify(token, JWT_SECRET);
+
+    const user = await User.findById(decoded._id);
+    if (!user) {
+      return res.status(401).json({ error: "Invalid or expired token" });
+    }
+
+    req.user = user;
+    next();
+  } catch (error) {
+    return res.status(401).json({ error: "Invalid or expired token" });
+  }
+};
 
 
 export const signup = async (req, res) => {
@@ -87,9 +128,10 @@ export const signin = async (req, res) => {
       });
     }
     // create signed token
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
       expiresIn: "7d",
     });
+    
 
     user.password = undefined;
     user.secret = undefined;
@@ -99,7 +141,7 @@ export const signin = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    return res.status(400).send("Error. Try again.");
+    return res.status(400).json({ error: err.message });
   }
 };
 
@@ -112,7 +154,6 @@ export const forgotPassword = async (req, res) => {
     return res.json({ error: "User not found" });
   }
   // generate code
-  const { default: nanoid } = await import("nanoid");
   const resetCode = nanoid(5).toUpperCase();
   // save to db
   user.resetCode = resetCode;
@@ -157,6 +198,67 @@ export const resetPassword = async (req, res) => {
     user.save();
     return res.json({ ok: true });
   } catch (err) {
+    console.log(err);
+  }
+};
+
+
+export const uploadImage = async (req, res) => {
+  console.log("upload image > user _id", req.user._id);
+  
+  try {
+      const result = await cloudinary.uploader.upload(req.body.image, {
+        public_id: nanoid(),
+        resource_type: "image",
+      });
+      console.log("CLOUDINARY RESULT => ", result);
+      
+      const user = await User.findByIdAndUpdate(req.user._id, {
+        image: {
+        public_id: result.public_id,
+        url: result.secure_url,
+      },
+    }, 
+      {new: true}
+      );
+      //send response
+      return res.json({
+        name: user.name,
+        email: user.email,
+        image: user.image,
+      });
+  }catch (err) {
+    console.log(err);
+  }
+  
+  res.json({
+    success: true,
+    message: "Image uploaded successfully",
+  });
+};
+
+
+
+export const updatePassword = async (req, res) => {
+  try{
+    const {password} = req.body;
+    if(!password || password.length < 6){
+      return res.json({
+        error: "Please provide a password of 6 or more characters",
+      });
+    } else{
+      //UPDATE DATABASE
+      const hashedPassword = await hashPassword(password);
+      const user = await User.findByIdAndUpdate(req.user._id, 
+        {
+         password: hashedPassword,
+        });
+        user.password = undefined;
+        user.secret = undefined;
+        return res.json(user);
+    }
+
+  }catch(err){
     console.log(err);
   }
 };
