@@ -1,6 +1,6 @@
 import Cart from "../Models/cart";
 
-// Get cart by user ID
+
 // Get cart by user ID
 export const getCartByUserId = async (req, res) => {
   try {
@@ -63,7 +63,7 @@ export const removeFromCart = async (req, res) => {
       return res.status(404).json({ error: "Cart not found" });
     }
 
-    cart.items = cart.items.filter((item) => item.productId !== productId);
+    cart.items = cart.items.filter((item) => item.productId.toString() !== productId.toString());
 
     await cart.save();
     res.json(cart);
@@ -71,6 +71,8 @@ export const removeFromCart = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+
 
 // Clear cart
 export const clearCart = async (req, res) => {

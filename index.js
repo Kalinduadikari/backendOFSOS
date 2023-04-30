@@ -7,6 +7,9 @@ import { DATABASE } from "./config";
 import authRoutes from "./routes/auth";
 import productRoutes from "./routes/products";
 import cartRoutes from "./routes/cart";
+import paymentRoutes from "./routes/payment";
+import orderRoutes from "./routes/order";
+
 
 const morgan = require("morgan");
 
@@ -29,5 +32,7 @@ app.use(morgan("dev"));
 app.use("/api/users", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/payments", paymentRoutes);
+app.use("/api/orders", orderRoutes);
 
 app.listen(8000, () => console.log("Server running on port 8000"));
