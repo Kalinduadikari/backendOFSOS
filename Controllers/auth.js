@@ -157,7 +157,7 @@ export const forgotPassword = async (req, res) => {
   const resetCode = nanoid(5).toUpperCase();
   // save to db
   user.resetCode = resetCode;
-  user.save();
+  await user.save();
   // prepare email
   const emailData = new SibApiV3Sdk.SendSmtpEmail();
   emailData.sender = { email: EMAIL_FROM };

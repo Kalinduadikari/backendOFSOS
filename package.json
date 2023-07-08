@@ -21,6 +21,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "cloudinary": "^1.36.1",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "esm": "^3.2.25",
@@ -30,10 +31,14 @@
     "mongodb": "^5.2.0",
     "mongoose": "^7.0.3",
     "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
     "nanoid": "^3.3.6",
     "navigator": "^1.0.1",
+    "nodemailer": "^6.9.1",
     "shortid": "^2.2.16",
     "sib-api-v3-sdk": "^8.5.0",
-    "stripe": "^12.3.0"
+    "socket.io": "^4.6.1",
+    "stripe": "^12.3.0",
+    "uuid": "^9.0.0"
   }
 }

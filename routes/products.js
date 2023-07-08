@@ -1,4 +1,5 @@
 import express from "express";
+import upload from '../config/multer';
 
 const router = express.Router();
 
@@ -9,6 +10,7 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
+  sellProduct,
 } from "../Controllers/products";
 
 
@@ -22,8 +24,9 @@ router.get("/", (req, res) => {
 
 router.get("/getAllProducts", getAllProducts);
 router.get("/:id", getProduct);
-router.post("/", createProduct);
-router.put("/:id", updateProduct);
+router.post('/', upload.single('image'), createProduct);
+router.put("/:id", upload.single('image'), updateProduct);
 router.delete("/:id", deleteProduct);
+router.put("/sell/:id", sellProduct);
 
 export default router;
