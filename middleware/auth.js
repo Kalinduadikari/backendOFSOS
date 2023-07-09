@@ -3,7 +3,7 @@ import Fishmonger from "../Models/fishmongers";
 import CustomError from "../errors/CustomError";
 require('dotenv').config();
 
-export const requireSignin = async (req, res, next) => {
+export const protect = async (req, res, next) => {
   let token;
 
   if (
