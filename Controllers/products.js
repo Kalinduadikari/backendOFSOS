@@ -1,5 +1,6 @@
 import Product from "../Models/products";
 import { v2 as cloudinary } from 'cloudinary';
+require('dotenv').config();
 
 
 

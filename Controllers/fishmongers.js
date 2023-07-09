@@ -2,6 +2,7 @@ import Fishmonger from "../Models/fishmongers";
 import { hashPassword, comparePassword } from "../helpers/auth";
 import jwt from "jsonwebtoken";
 import SibApiV3Sdk from 'sib-api-v3-sdk';
+require('dotenv').config();
 
 
 

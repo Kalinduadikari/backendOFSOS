@@ -7,6 +7,8 @@ import cookieParser from "cookie-parser";
 import http from "http";
 import { Server } from "socket.io";
 import ChatMessage from "./Models/chat";
+require('dotenv').config();
+
 
 import authRoutes from "./routes/auth";
 import productRoutes from "./routes/products";

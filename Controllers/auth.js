@@ -3,6 +3,7 @@ import { hashPassword, comparePassword } from "../helpers/auth";
 import jwt from "jsonwebtoken";
 import { expressjwt } from "express-jwt";
 const cloudinary = require('cloudinary').v2
+require('dotenv').config();
 
 const { nanoid } = require('nanoid');
 

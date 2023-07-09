@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import Fishmonger from "../Models/fishmongers";
 import CustomError from "../errors/CustomError";
+require('dotenv').config();
 
 export const protect = async (req, res, next) => {
   let token;
