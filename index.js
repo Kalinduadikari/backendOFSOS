@@ -4,7 +4,6 @@ import cors from "cors";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import { DATABASE } from "./config";
 import http from "http";
 import { Server } from "socket.io";
 import ChatMessage from "./Models/chat";
