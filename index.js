@@ -27,7 +27,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:3000", "https://ofsos.onrender.com"],
+    origin: ["http://localhost:3000"],
     methods: ["GET", "POST"],
   },
 });
@@ -82,14 +82,14 @@ io.on("connection", (socket) => {
 // db connection
 mongoose.set("strictQuery", false); // required for version 6
 mongoose
-  .connect(DATABASE)
+  .connect(process.env.DATABASE)
   .then(() => console.log("DB connected"))
   .catch((err) => console.log("DB CONNECTION ERROR: ", err));
 
 // middlewares
 app.use(express.json({ limit: "4mb" }));
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({origin: ["http://localhost:3000"], credentials: true}));
+app.use(cors({origin: ["http://localhost:3000", "https://ofsos.onrender.com"], credentials: true}));
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(cookieParser());
