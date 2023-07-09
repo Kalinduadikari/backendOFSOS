@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "../config";
 import Fishmonger from "../Models/fishmongers";
 import CustomError from "../errors/CustomError";
 
@@ -20,7 +19,7 @@ export const protect = async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const fishmonger = await Fishmonger.findById(decoded.id).select("-password");
 
     if (!fishmonger) {

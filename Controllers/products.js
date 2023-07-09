@@ -1,13 +1,13 @@
 import Product from "../Models/products";
 import { v2 as cloudinary } from 'cloudinary';
-import { CLOUDINARY_NAME, CLOUDINARY_KEY, CLOUDINARY_SECRET } from '../config';
+
 
 
 
 cloudinary.config({
-  cloud_name: CLOUDINARY_NAME,
-  api_key: CLOUDINARY_KEY,
-  api_secret: CLOUDINARY_SECRET,
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET,
 });
 
 

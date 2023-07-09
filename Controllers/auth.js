@@ -13,23 +13,22 @@ const { nanoid } = require('nanoid');
 
 // Sendinblue
 import SibApiV3Sdk from 'sib-api-v3-sdk';
-import { JWT_SECRET, SENDINBLUE_API_KEY, EMAIL_FROM, CLOUDINARY_NAME, CLOUDINARY_KEY, CLOUDINARY_SECRET } from "../config";
 
 const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 const defaultClient = SibApiV3Sdk.ApiClient.instance;
 const apiKey = defaultClient.authentications['api-key'];
-apiKey.apiKey = SENDINBLUE_API_KEY;
+apiKey.apiKey = process.env.SENDINBLUE_API_KEY;
 
 //cloudinary
 cloudinary.config({       
- cloud_name: CLOUDINARY_NAME,
- api_key: CLOUDINARY_KEY,
- api_secret: CLOUDINARY_SECRET,
+ cloud_name: process.env.CLOUDINARY_NAME,
+ api_key: process.env.CLOUDINARY_KEY,
+ api_secret: process.env.CLOUDINARY_SECRET,
 });
 
 //middleware 
 export const requireSignin = expressjwt({
-  secret: JWT_SECRET,
+  secret: process.env.JWT_SECRET,
   algorithms: ["HS256"],
 });
 
@@ -38,7 +37,7 @@ export const requireSignin = expressjwt({
 export const authenticateUser = async (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const user = await User.findById(decoded._id);
     if (!user) {
@@ -90,7 +89,7 @@ export const signup = async (req, res) => {
       }).save();
 
       // create signed token
-      const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
         expiresIn: "7d",
       });
       
@@ -128,7 +127,7 @@ export const signin = async (req, res) => {
       });
     }
     // create signed token
-    const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
     
@@ -160,7 +159,7 @@ export const forgotPassword = async (req, res) => {
   await user.save();
   // prepare email
   const emailData = new SibApiV3Sdk.SendSmtpEmail();
-  emailData.sender = { email: EMAIL_FROM };
+  emailData.sender = { email: process.env.EMAIL_FROM };
   emailData.to = [{ email: user.email }];
   emailData.subject = "Password reset code";
   emailData.htmlContent = `<h1>Your password reset code is: ${resetCode}</h1>`;

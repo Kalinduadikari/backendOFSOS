@@ -1,7 +1,6 @@
 import Fishmonger from "../Models/fishmongers";
 import { hashPassword, comparePassword } from "../helpers/auth";
 import jwt from "jsonwebtoken";
-import { JWT_SECRET, SENDINBLUE_API_KEY, EMAIL_FROM } from "../config";
 import SibApiV3Sdk from 'sib-api-v3-sdk';
 
 
@@ -9,11 +8,11 @@ import SibApiV3Sdk from 'sib-api-v3-sdk';
 const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 const defaultClient = SibApiV3Sdk.ApiClient.instance;
 const apiKey = defaultClient.authentications['api-key'];
-apiKey.apiKey = SENDINBLUE_API_KEY;
+apiKey.apiKey = process.env.SENDINBLUE_API_KEY;
 
  
 const generateToken = (fishmonger) => {
-    return jwt.sign({ id: fishmonger._id }, JWT_SECRET, {
+    return jwt.sign({ id: fishmonger._id },process.env.JWT_SECRET, {
       expiresIn: "24h",
     });
   };
@@ -65,7 +64,7 @@ const generateToken = (fishmonger) => {
         return res.status(401).json({ message: "Not logged in" });
       }
     
-      const decoded = jwt.verify(token, JWT_SECRET);
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
       const fishmonger = await Fishmonger.findById(decoded.id).select("-password");
     
       if (!fishmonger) {
@@ -152,7 +151,7 @@ const generateToken = (fishmonger) => {
         return res.status(401).json({ loggedIn: false, message: "Not logged in" });
       }
   
-      const decoded = jwt.verify(token, JWT_SECRET);
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
       const fishmonger = await Fishmonger.findById(decoded.id);
   
       if (!fishmonger) {
@@ -234,7 +233,7 @@ const generateToken = (fishmonger) => {
       // Send password reset email
       const emailParams = {
         to: [{ email: email, name: fishmonger.name }],
-        sender: { email: EMAIL_FROM, name: 'Your Team' },
+        sender: { email: process.env.EMAIL_FROM, name: 'Your Team' },
         subject: 'Password Reset Request',
         htmlContent: `<p>Hi ${fishmonger.name},</p><p>To reset your password, please click the following link: <a href="http://localhost:3000/reset/${token}">Reset Password</a></p><p>If you did not request a password reset, please ignore this email.</p><p>Best regards,</p><p>Your Team</p>`,
       };
