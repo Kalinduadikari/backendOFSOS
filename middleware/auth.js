@@ -3,12 +3,12 @@ import Fishmonger from "../Models/fishmongers";
 import CustomError from "../errors/CustomError";
 require('dotenv').config();
 
-export const protect = async (req, res, next) => {
+export const requireSignin = async (req, res, next) => {
   let token;
 
   if (
     req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer ")
+    req.headers.authorization.startsWith("Bearer")
   ) {
     token = req.headers.authorization.split(" ")[1];
   } else if (req.cookies.token) {
