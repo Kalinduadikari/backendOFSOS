@@ -90,7 +90,7 @@ mongoose
 // middlewares
 app.use(express.json({ limit: "4mb" }));
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({origin: ["http://localhost:3000", "https://ofsos.onrender.com"], credentials: true}));
+app.use(cors({ origin: ["http://localhost:3000", "https://ofsos.onrender.com"], credentials: true }));
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(cookieParser());
