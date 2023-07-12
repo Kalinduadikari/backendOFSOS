@@ -45,10 +45,9 @@ export const protect = async (req, res, next) => {
           "Not authorized, invalid token",
           "INVALID_TOKEN",
           "The provided token is invalid or expired.",
-          error.stack // Pass the actual error stack to the CustomError constructor
+          new Error().stack
         )
       );
-      
     } else {
       next(error);
     }
