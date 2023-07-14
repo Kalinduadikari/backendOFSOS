@@ -28,7 +28,14 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:3000", "https://ofsos.onrender.com"],
+    origin: (origin, callback) => {
+      const allowedOrigins = ["http://localhost:3000", "https://ofsos.onrender.com"];
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -91,7 +98,16 @@ mongoose
 // middlewares
 app.use(express.json({ limit: "4mb" }));
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ origin: ["http://localhost:3000", "https://ofsos.onrender.com"], credentials: true }));
+app.use(cors({ origin: (origin, callback) => {
+  const allowedOrigins = ["http://localhost:3000", "https://ofsos.onrender.com"];
+  if (!origin || allowedOrigins.includes(origin)) {
+    callback(null, true);
+  } else {
+    callback(new Error("Not allowed by CORS"));
+  }
+},
+credentials: true,
+}));
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(cookieParser());
