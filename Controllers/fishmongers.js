@@ -211,7 +211,7 @@ const generateToken = (fishmonger) => {
 
 
 
-
+  const deployedURL = 'https://ofsos.onrender.com';
 
   //FORGOT PASSWORD FUNCTION
   export const forgotPassword = async (req, res) => {
@@ -236,7 +236,7 @@ const generateToken = (fishmonger) => {
         to: [{ email: email, name: fishmonger.name }],
         sender: { email: process.env.EMAIL_FROM, name: 'Your Team' },
         subject: 'Password Reset Request',
-        htmlContent: `<p>Hi ${fishmonger.name},</p><p>To reset your password, please click the following link: <a href="http://localhost:3000/reset/${token}">Reset Password</a></p><p>If you did not request a password reset, please ignore this email.</p><p>Best regards,</p><p>Your Team</p>`,
+        htmlContent: `<p>Hi ${fishmonger.name},</p><p>To reset your password, please click the following link: <a href="${deployedURL}/reset/${token}">Reset Password</a></p><p>If you did not request a password reset, please ignore this email.</p><p>Best regards,</p><p>Your Team</p>`,
       };
   
       apiInstance.sendTransacEmail(emailParams).then(
