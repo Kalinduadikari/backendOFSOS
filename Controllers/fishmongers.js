@@ -49,11 +49,16 @@ const generateToken = (fishmonger) => {
       }
   
       const token = generateToken(fishmonger);
+
+      // Set the "test" cookie with the value "12345"
+      res.cookie("test", "12345");
+
+        // Set the token cookie
       res.cookie("token", token, { httpOnly: true });
-      console.log("TOKEN HERE: ", token);
+      console.log("TOKEN HERE:", token);
 
        // Log the cookie on the server-side
-      console.log("Cookie:", req.cookies.token);
+       console.log("Cookie:", req.cookies.token);
       
       res.json({ fishmonger });
     } catch (error) {
