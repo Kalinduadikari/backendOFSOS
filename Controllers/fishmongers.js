@@ -49,7 +49,7 @@ const generateToken = (fishmonger) => {
       }
   
        // Set the "test" cookie with the value "12345"
-    res.cookie("test", "12345", { httpOnly: true });
+    res.cookie("test", "12345", { sameSite: "none", secure: true });
 
     // Log the "test" cookie
     console.log("Test Cookie:", req.cookies.test || "Cookie not received");
