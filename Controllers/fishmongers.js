@@ -49,7 +49,7 @@ const generateToken = (fishmonger) => {
       }
   
       const token = generateToken(fishmonger);
-      res.cookie("token", token, { httpOnly: true, sameSite: "strict" });
+      res.cookie("token", token, { httpOnly: true });
       res.json({ fishmonger });
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -120,7 +120,7 @@ const generateToken = (fishmonger) => {
       await fishmonger.save();
   
       const token = generateToken(fishmonger);
-      res.cookie("token", token, { httpOnly: true, sameSite: "strict" });
+      res.cookie("token", token, { httpOnly: true });
       res.json({ fishmonger });
     } catch (error) {
       res.status(500).json({ error: error.message });
