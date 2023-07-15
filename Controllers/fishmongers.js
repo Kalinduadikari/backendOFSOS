@@ -49,12 +49,13 @@ const generateToken = (fishmonger) => {
       }
   
        // Set the "test" cookie with the value "12345"
-    res.cookie("test", "12345");
+       res.cookie("test", "12345");
 
-    // Log the "test" cookie
-    console.log("Test Cookie:", req.signedCookies.test || "Cookie not received");
-
-    res.json({ fishmonger });
+       // Send response with updated cookie
+       res.json({ fishmonger });
+   
+       // Log the "test" cookie
+       console.log("Test Cookie:", req.cookies.test || "Cookie not received");
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
