@@ -8,7 +8,7 @@ import http from "http";
 import { Server } from "socket.io";
 import ChatMessage from "./Models/chat";
 require('dotenv').config();
-
+const authMiddleware = require('./middleware/auth');
 
 import authRoutes from "./routes/auth";
 import productRoutes from "./routes/products";
@@ -104,7 +104,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/fishmongers", fishmongersRoutes);
 app.use("/api/mlmodel", mlModelRoutes);
 app.use("/api/chat", chatRoutes);
-
+app.use(authMiddleware);
 
 // custom error handler
 app.use((err, req, res, next) => {
