@@ -24,8 +24,6 @@ const morgan = require("morgan");
 
 const app = express();
 
-app.set("trust proxy", 1); // Add this lin
-
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
