@@ -50,7 +50,7 @@ const generateToken = (fishmonger) => {
   
       const token = generateToken(fishmonger);
       res.cookie("token", token, { httpOnly: true });
-      fs.appendFileSync('token_log.txt', `Token: ${token}\n`);
+      console.log("TOKEN HERE: ", token);
       res.json({ fishmonger });
     } catch (error) {
       res.status(500).json({ error: error.message });
