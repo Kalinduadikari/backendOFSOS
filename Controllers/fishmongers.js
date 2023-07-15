@@ -51,6 +51,10 @@ const generateToken = (fishmonger) => {
       const token = generateToken(fishmonger);
       res.cookie("token", token, { httpOnly: true });
       console.log("TOKEN HERE: ", token);
+
+       // Log the cookie on the server-side
+      console.log("Cookie:", req.cookies.token);
+      
       res.json({ fishmonger });
     } catch (error) {
       res.status(500).json({ error: error.message });
