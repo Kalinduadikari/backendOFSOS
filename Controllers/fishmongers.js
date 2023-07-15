@@ -211,7 +211,7 @@ const generateToken = (fishmonger) => {
 
 
 
-  const deployedURL = 'https://ofsos.onrender.com';
+  const deployedURL = 'https://webofsos.onrender.com';
 
   //FORGOT PASSWORD FUNCTION
   export const forgotPassword = async (req, res) => {

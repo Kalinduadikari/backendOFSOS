@@ -4,11 +4,14 @@ import { protect } from "../middleware/auth";
 
 const router = express.Router();
 
+
 router.get("/", (req, res) => {
-  res.json({
-    data: "FISHMONGER DATA",
+    return res.json({
+      data: "FISHMONGER DATA",
+    });
   });
-});
+  
+
 
 router.post("/signin", signin);
 router.post("/signup", signup);
@@ -18,5 +21,6 @@ router.get("/loggedin", protect, loginStatus);
 router.post("/forgotpassword", forgotPassword);
 router.post("/resetpassword", resetPassword); 
 router.put("/updatefishmonger", protect, updateFishmonger);
+
 
 export default router;
