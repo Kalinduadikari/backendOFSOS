@@ -1,4 +1,3 @@
-
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
@@ -8,7 +7,7 @@ import http from "http";
 import { Server } from "socket.io";
 import ChatMessage from "./Models/chat";
 require('dotenv').config();
-const authMiddleware = require('./middleware/auth');
+import { protect } from "./middleware/auth"; // Import the protect middleware
 
 import authRoutes from "./routes/auth";
 import productRoutes from "./routes/products";
@@ -19,7 +18,6 @@ import fishmongersRoutes from "./routes/fishmongers";
 import mlModelRoutes from './routes/mlmodel';
 import chatRoutes from "./routes/chat";
 import CustomError from "./errors/CustomError";
-
 
 const morgan = require("morgan");
 
@@ -41,14 +39,12 @@ io.on("connection", (socket) => {
     console.log(`User with ID: ${socket.id} joined room: ${data}`);
   });
 
-
-  
-    socket.on("send_message", async (data) => {
+  socket.on("send_message", async (data) => {
     const newMessage = new ChatMessage({
-        user: data.author,
-        username: data.author,
-        message: data.message,
-        timestamp: Date.now(),
+      user: data.author,
+      username: data.author,
+      message: data.message,
+      timestamp: Date.now(),
     });
 
     try {
@@ -60,25 +56,21 @@ io.on("connection", (socket) => {
         text: newMessage.message,
         createdAt: newMessage.timestamp,
         user: {
-            _id: newMessage.user,
-            name: newMessage.username,
+          _id: newMessage.user,
+          name: newMessage.username,
         },
-      },data);
+      }, data);
 
       console.log(data);
     } catch (err) {
-        console.error(err);
+      console.error(err);
     }
   });
 
   socket.on("disconnect", () => {
     console.log("User Disconnected", socket.id);
   });
-
 });
-
-
-
 
 // db connection
 mongoose.set("strictQuery", false); // required for version 6
@@ -104,7 +96,15 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/fishmongers", fishmongersRoutes);
 app.use("/api/mlmodel", mlModelRoutes);
 app.use("/api/chat", chatRoutes);
-app.use(authMiddleware);
+
+// Add the protect middleware to the desired routes
+app.use("/api/products", protect);
+app.use("/api/cart", protect);
+app.use("/api/payments", protect);
+app.use("/api/orders", protect);
+app.use("/api/fishmongers", protect);
+app.use("/api/mlmodel", protect);
+app.use("/api/chat", protect);
 
 // custom error handler
 app.use((err, req, res, next) => {
@@ -134,6 +134,6 @@ app.use((err, req, res, next) => {
   }
 });
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3000;
 
 server.listen(PORT, () => console.log("Server running on port " + PORT));
