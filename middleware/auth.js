@@ -9,7 +9,9 @@ export const protect = async (req, res, next) => {
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
+    
   ) {
+    console.log("Request Headers:", req.headers);
     token = req.headers.authorization.split(" ")[1];
   } else if (req.cookies.token) {
     token = req.cookies.token;
@@ -41,7 +43,7 @@ export const protect = async (req, res, next) => {
     next();
   } catch (error) {
     console.log("Token Verification Error:", error); 
-    
+
     if (error instanceof jwt.JsonWebTokenError) {
       return next(
         new CustomError(
