@@ -16,7 +16,7 @@ export const protect = async (req, res, next) => {
   }
 
   console.log("Token:", token); // Log the token
-  
+
   if (!token) {
     return next(new CustomError(401, "Not authorized, no token found", "NO_TOKEN_FOUND", "No token found in the request headers or cookies.", new Error().stack));
   }
@@ -40,6 +40,8 @@ export const protect = async (req, res, next) => {
     req.fishmonger = fishmonger;
     next();
   } catch (error) {
+    console.log("Token Verification Error:", error); 
+    
     if (error instanceof jwt.JsonWebTokenError) {
       return next(
         new CustomError(
