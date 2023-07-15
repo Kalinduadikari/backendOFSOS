@@ -48,15 +48,13 @@ const generateToken = (fishmonger) => {
         return res.status(400).json({ error: "Invalid password" });
       }
   
-      const token = generateToken(fishmonger);
+       // Set the "test" cookie with the value "12345"
+    res.cookie("test", "12345");
 
-      // Set the "test" cookie with the value "12345"
-      res.cookie("test", "12345");
-  
-      // Log the "test" cookie
-      console.log("Test Cookie:", req.cookies.test);
-  
-      res.json({ fishmonger });
+    // Log the "test" cookie
+    console.log("Test Cookie:", req.cookies.test || "Cookie not received");
+
+    res.json({ fishmonger });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
