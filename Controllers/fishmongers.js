@@ -52,7 +52,7 @@ const generateToken = (fishmonger) => {
     res.cookie("test", "12345");
 
     // Log the "test" cookie
-    console.log("Test Cookie:", req.cookies.test || "Cookie not received");
+    console.log("Test Cookie:", req.signedCookies.test || "Cookie not received");
 
     res.json({ fishmonger });
     } catch (error) {
