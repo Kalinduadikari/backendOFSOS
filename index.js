@@ -2,7 +2,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-const cookieParser = require("cookie-parser");
+import cookieParser from "cookie-parser";
 import http from "http";
 import { Server } from "socket.io";
 import ChatMessage from "./Models/chat";

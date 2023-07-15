@@ -49,7 +49,7 @@ const generateToken = (fishmonger) => {
       }
   
        // Set the "test" cookie with the value "12345"
-       res.cookie("test", "12345");
+       res.cookie("test", "12345", { httpOnly: true });
 
        // Send response with updated cookie
        res.json({ fishmonger });
