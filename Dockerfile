@@ -1,6 +1,9 @@
 # Specify the base image with Node.js pre-installed
 FROM node:18.12.1
 
+# Set the working directory inside the container
+WORKDIR /
+
 # Copy package.json and package-lock.json (if present)
 COPY package*.json ./
 
