@@ -4,23 +4,22 @@ import CustomError from "../errors/CustomError";
 require('dotenv').config();
 
 export const protect = async (req, res, next) => {
-  const getToken = function fromCookie (req) {
-    let token = req.cookies.token;
+  let token;
 
-    if (!token) {
-      token = req.headers.authorization?.split(" ")[1] || null;
-    }
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  } else if (req.cookies.token) {
+    token = req.cookies.token;
+  }
 
-    return token;
-  };
+  if (!token) {
+    return next(new CustomError(401, "Not authorized, no token found", "NO_TOKEN_FOUND", "No token found in the request headers or cookies.", new Error().stack));
+  }
 
   try {
-    const token = getToken(req);
-
-    if (!token) {
-      return next(new CustomError(401, "Not authorized, no token found", "NO_TOKEN_FOUND", "No token found in the request headers or cookies.", new Error().stack));
-    }
-
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const fishmonger = await Fishmonger.findById(decoded.id).select("-password");
 
