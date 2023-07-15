@@ -15,6 +15,8 @@ export const protect = async (req, res, next) => {
     token = req.cookies.token;
   }
 
+  console.log("Token:", token); // Log the token
+  
   if (!token) {
     return next(new CustomError(401, "Not authorized, no token found", "NO_TOKEN_FOUND", "No token found in the request headers or cookies.", new Error().stack));
   }
