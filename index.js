@@ -2,7 +2,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-import cookieParser from "cookie-parser";
+const cookieParser = require("cookie-parser");
 import http from "http";
 import { Server } from "socket.io";
 import ChatMessage from "./Models/chat";
@@ -87,9 +87,9 @@ mongoose
   .catch((err) => console.log("DB CONNECTION ERROR: ", err));
 
 // middlewares
+app.use(cookieParser());
 app.use(express.json({ limit: "4mb" }));
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
 app.use(cors({ origin: ["https://webofsos.onrender.com"], credentials: true }));
 app.use(morgan("dev"));
 
