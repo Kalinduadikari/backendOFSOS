@@ -93,13 +93,6 @@ app.use(cors({ origin: ["https://webofsos.onrender.com"], credentials: true }));
 app.use(morgan("dev"));
 app.use(cookieParser());
 
-// Middleware to log cookies
-app.use((req, res, next) => {
-  console.log("Cookie Header:", req.headers.cookie);
-  next();
-});
-
-
 // route middlewares
 app.use("/api/users", authRoutes);
 app.use("/api/products", productRoutes);
