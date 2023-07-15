@@ -92,6 +92,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: ["https://webofsos.onrender.com"], credentials: true }));
 app.use(morgan("dev"));
 app.use(cookieParser());
+app.use((req, res, next) => {
+  console.log("Cookies:", req.cookies);
+  next();
+});
 
 // route middlewares
 app.use("/api/users", authRoutes);
