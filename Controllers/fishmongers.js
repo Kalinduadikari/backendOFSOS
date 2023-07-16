@@ -48,13 +48,17 @@ const generateToken = (fishmonger) => {
         return res.status(400).json({ error: "Invalid password" });
       }
   
-       // Set the "test" cookie with the value "12345"
-       res.cookie("test", "12345", { domain: "webofsos.onrender.com" });
+      const token = generateToken(fishmonger);
 
-    // Log the "test" cookie
-    console.log("Test Cookie:", req.cookies.test || "Cookie not received");
+      // Set the "test" cookie with the value "12345"
+    res.cookie("test", "12345");
+      res.cookie("token", token, { httpOnly: true });
+      console.log("TOKEN HERE: ", token);
 
-    res.json({ fishmonger });
+       // Log the cookie on the server-side
+      console.log("Cookie:", req.cookies.token);
+      
+      res.json({ fishmonger });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
