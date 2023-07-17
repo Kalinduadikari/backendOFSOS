@@ -2,6 +2,7 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import http from "http";
 import { Server } from "socket.io";
@@ -27,7 +28,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: ["https://webofsos.onrender.com"],
+    origin: ["https://ofsosweb.live"],
     methods: ["GET", "POST"],
   },
 });
@@ -87,12 +88,12 @@ mongoose
   .catch((err) => console.log("DB CONNECTION ERROR: ", err));
 
 // middlewares
-app.use(cookieParser());
 app.use(express.json({ limit: "4mb" }));
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ origin: ["https://webofsos.onrender.com"], credentials: true }));
+app.use(cors({ origin: ["https://ofsosweb.live"], credentials: true }));
 app.use(morgan("dev"));
-
+app.use(bodyParser.json());
+app.use(cookieParser());
 
 // route middlewares
 app.use("/api/users", authRoutes);
